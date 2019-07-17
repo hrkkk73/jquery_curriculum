@@ -30,13 +30,9 @@
         //indexという変数に代入します。
          var index = $('.nav li').index(this);
          //コンテンツを一度すべて非表示にする
-         $('.contents li').css('display', 'none');
+         $('.contents li').addClass('is-hidden');
          //クリックされたタブと同じ順番のコンテンツを表示する
-         $('.contents li').eq(index).css('display', 'block');
-         //一度タブについているクラスnavを消し
-         $('.nav li').removeClass('nav');
-         //クリックされたタブのみにクラスnavをつける
-         $(this).addClass('nav');
+         $('.contents li').eq(index).removeClass('is-hidden');
        });
       });
       // 今回やるのはタブメニューです。
