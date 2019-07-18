@@ -88,9 +88,7 @@
         $('.select').change(function() {
           var sort = $(this).val(); //selectの要素が変更された時のバリューを取得して変数sortに代入する
           if (sort == 'all') { //sortのバリューがallと等しかった時
-            $('.list li').each(function() { //eachメソッドで繰り返し処理をし、showメソッドを使って表示
-              $(this).show();
-            });
+            $('.list li').show();
           } else { //sortのバリューがallと等しくなかった時
             $('.list li').each(function() {
               if ($(this).data('category-type') == sort) { //選択したlistのcategory-typeがvalメソッドで取得した属性と等しかった時
