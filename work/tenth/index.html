@@ -26,6 +26,76 @@
     </div>
     <script src="../../common/js/jquery.js"></script>
     <script>
+      $(function() {
+
+        var num = 0
+
+        var word = '';
+
+        $('#js-search-button').on('click', function() {
+          $('.error').detach();
+          var search = $('#js-search-word').val();
+
+
+          if (word === search) {
+            num++;
+          } else {
+            num = 1;
+            $('.lists').empty();
+          }
+
+          word = search;
+
+          $.ajax({
+            url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
+            type: 'GET',
+            datatype: 'json',
+            data: {
+              // 「区分:サービス固有パラメーター」を確認して、必要な情報をdata内に入れましょう。
+              field: 1,
+              page: num,
+              keyword: search,
+              hits: '20',
+              applicationId: '1019399324990976605', // (今回はこのIDを使用してください)
+              booksGenreId: '001',
+              timeout: 10000
+              },
+
+          }).done(function(data) {
+              // この中にデータ取得後の動きを記述していきます。
+              $('#js-search-button').on('click', function() {
+                $('.datacoment').detach();
+              });
+              if (data.count > 0) {
+                var list = '';
+                 $.each(data.Items, function(index, value) {
+                 list += "<li class='lists__item'>" + "<div class='lists__item__inner'>" + "<a href='" +
+                             value.Item.itemUrl + "' class='lists__item__link' target='_blank'>" + "<img src='" +
+                             value.Item.largeImageUrl + "' class='lists__item__img' alt='" + value.Item.title +"'>" +
+                             "<p class='lists__item__detail'>作品名： "+ value.Item.title +" </p>" +
+                             "<p class='lists__item__detail'>作者　： "+ value.Item.author+" </p>" +
+                             "<p class='lists__item__detail'>出版社： "+ value.Item.publisherName +" </p>" +
+                             "</a>" + "</div>" + "</li>";
+              });
+              $('ul').prepend(list);
+              console.log(data);
+              } else {
+                $('.lists', '.datacoment','error').detach();
+                $('.lists').before("<div class=error></div>");
+                $('.error').html('<p class="message">検索結果が見つかりませんでした。<br>別のキーワードで検索して下さい。</p>');
+              };
+
+          }).fail(function() {
+            $('#js-search-button').on('click', function() {
+              $('.lists', '.error').detach();
+            });
+            $('.datacoment').detach();
+            $('.lists').after('<div class="datacoment"></div>')
+            $('.datacoment').html('<p class="message">データ通信できませんでした<br>接続を確認してください。</p>');
+          });
+        });
+      });
+
       // 楽天ブックスの総合検索APIを使って製作してください。
       // answerの挙動を良く見てね！
       //
